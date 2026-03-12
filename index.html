@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NestWander — Find your perfect stay</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a class="logo" href="#">
+      <i class="fa-solid fa-compass"></i>
+      <span>Nest<em>Wander</em></span>
+    </a>
+    <div class="search-bar" onclick="openModal()">
+      <div class="search-section"><label>Where</label><span id="nb-where">Search destinations</span></div>
+      <div class="divider"></div>
+      <div class="search-section"><label>Check in</label><span id="nb-checkin">Add date</span></div>
+      <div class="divider"></div>
+      <div class="search-section"><label>Check out</label><span id="nb-checkout">Add date</span></div>
+      <div class="divider"></div>
+      <div class="search-section"><label>Guests</label><span id="nb-guests">Add guests</span></div>
+      <button class="search-btn"><i class="fa fa-search"></i></button>
+    </div>
+    <div class="nav-right">
+      <button class="nav-link" onclick="showToast('Host feature coming soon! 🏠')">List your space</button>
+      <div class="user-menu" onclick="toggleUserMenu()">
+        <i class="fa fa-bars"></i>
+        <div class="avatar"><i class="fa fa-user"></i></div>
+      </div>
+      <div class="user-dropdown" id="userDropdown">
+        <a href="#" onclick="showToast('Sign up feature coming soon!')">Sign up</a>
+        <a href="#" onclick="showToast('Log in feature coming soon!')">Log in</a>
+        <hr/>
+        <a href="#" onclick="openWishlistPanel()">Saved places</a>
+        <a href="#" onclick="showToast('Help center coming soon!')">Help center</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="categories" id="categoryBar">
+    <div class="cat-item active" data-cat="all"     onclick="filterCategory(this)"><i class="fa fa-globe"></i><span>All</span></div>
+    <div class="cat-item" data-cat="beachfront"     onclick="filterCategory(this)"><i class="fa fa-water"></i><span>Beachfront</span></div>
+    <div class="cat-item" data-cat="cabin"          onclick="filterCategory(this)"><i class="fa fa-tree"></i><span>Cabins</span></div>
+    <div class="cat-item" data-cat="mountain"       onclick="filterCategory(this)"><i class="fa fa-mountain"></i><span>Mountains</span></div>
+    <div class="cat-item" data-cat="tropical"       onclick="filterCategory(this)"><i class="fa fa-umbrella-beach"></i><span>Tropical</span></div>
+    <div class="cat-item" data-cat="city"           onclick="filterCategory(this)"><i class="fa fa-city"></i><span>City</span></div>
+    <div class="cat-item" data-cat="camping"        onclick="filterCategory(this)"><i class="fa fa-campground"></i><span>Camping</span></div>
+    <div class="cat-item" data-cat="pool"           onclick="filterCategory(this)"><i class="fa fa-swimming-pool"></i><span>Pool</span></div>
+    <div class="cat-item" data-cat="castle"         onclick="filterCategory(this)"><i class="fa fa-chess-rook"></i><span>Castles</span></div>
+    <div class="cat-item" data-cat="tiny"           onclick="filterCategory(this)"><i class="fa fa-house"></i><span>Tiny homes</span></div>
+  </div>
+
+    <div class="hero">
+    <div class="hero-slides" id="heroSlides">
+      <div class="hero-slide" style="background-image:url('images/slider3.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('images/slider1.jpg')"></div>
+      <div class="hero-slide" style="background-image:url('images/slider2.jpg')"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">✦ Over 6 million stays worldwide</div>
+      <h1>Find where<br/>you <em>belong</em></h1>
+      <p>Cozy cabins, beachfront villas, mountain escapes — all in one place.</p>
+      <button class="hero-cta" onclick="openModal()"><i class="fa fa-search"></i> Start exploring</button>
+    </div>
+    <div class="hero-dots" id="heroDots">
+      <div class="dot active" onclick="goSlide(0)"></div>
+      <div class="dot" onclick="goSlide(1)"></div>
+      <div class="dot" onclick="goSlide(2)"></div>
+    </div>
+  </div>
+
+ 
+  <main>
+   
+    <div class="results-bar" id="resultsBar" style="display:none">
+      <span id="resultsCount"></span>
+      <button onclick="clearSearch()"><i class="fa fa-times"></i> Clear filters</button>
+    </div>
+
+    <h2 class="section-title">Places to stay</h2>
+    <div class="listings-grid" id="listingsGrid"></div>
+    <div class="no-results" id="noResults" style="display:none">
+      <i class="fa fa-search"></i>
+      <h3>No stays found</h3>
+      <p>Try a different destination or clear the filters</p>
+      <button onclick="clearSearch()">Clear filters</button>
+    </div>
+
+    <h2 class="section-title">Explore Experiences</h2>
+    <div class="experiences-grid" id="expGrid"></div>
+
+    <h2 class="section-title">Destinations to discover</h2>
+    <div class="dest-grid" id="destGrid"></div>
+  </main>
+
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:12px"><i class="fa-solid fa-compass"></i> <span>Nest<em>Wander</em></span></div>
+        <p>Discover your next adventure.<br/>From mountain retreats to beach escapes.</p>
+      </div>
+      <div class="footer-grid">
+        <div class="footer-col"><h4>Support</h4><a href="#">Help Center</a><a href="#">Safety info</a><a href="#">Cancellations</a></div>
+        <div class="footer-col"><h4>Hosting</h4><a href="#">List your space</a><a href="#">Host resources</a><a href="#">Community</a></div>
+        <div class="footer-col"><h4>NestWander</h4><a href="#">About us</a><a href="#">Careers</a><a href="#">Press</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 NestWander, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></span>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+    <div class="modal" id="searchModal">
+      <div class="modal-header">
+        <h2>Where to next?</h2>
+        <button class="modal-close" onclick="closeModal()"><i class="fa fa-times"></i></button>
+      </div>
+      <div class="modal-fields">
+        <div class="modal-field full">
+          <label><i class="fa fa-map-marker-alt"></i> Destination</label>
+          <input type="text" id="whereInput" placeholder="Search cities, regions..." list="destinationList" autocomplete="off"/>
+          <datalist id="destinationList">
+            <option value="Maldives"></option><option value="Santorini"></option>
+            <option value="Bali"></option><option value="Goa"></option>
+            <option value="Manali"></option><option value="Coorg"></option>
+            <option value="Tokyo"></option><option value="Paris"></option>
+            <option value="Amalfi Coast"></option><option value="Jaipur"></option>
+          </datalist>
+        </div>
+        <div class="modal-field">
+          <label><i class="fa fa-calendar"></i> Check in</label>
+          <input type="date" id="checkinInput"/>
+        </div>
+        <div class="modal-field">
+          <label><i class="fa fa-calendar"></i> Check out</label>
+          <input type="date" id="checkoutInput"/>
+        </div>
+        <div class="modal-field">
+          <label><i class="fa fa-users"></i> Guests</label>
+          <div class="guest-counter">
+            <button onclick="changeGuests(-1)"><i class="fa fa-minus"></i></button>
+            <span id="guestCount">2</span>
+            <button onclick="changeGuests(1)"><i class="fa fa-plus"></i></button>
+          </div>
+        </div>
+        <div class="modal-field">
+          <label><i class="fa fa-tag"></i> Max price / night</label>
+          <div class="price-slider-wrap">
+            <input type="range" id="priceRange" min="1000" max="50000" step="500" value="50000" oninput="updatePriceLabel()"/>
+            <span id="priceLabel">Any price</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-clear" onclick="clearModalFields()">Clear all</button>
+        <button class="modal-search-btn" onclick="doSearch()"><i class="fa fa-search"></i> Search stays</button>
+      </div>
+    </div>
+  </div>
+
+ 
+  <div class="modal-overlay" id="bookingOverlay" onclick="closeBookingOutside(event)">
+    <div class="modal booking-modal" id="bookingModal">
+      <div class="modal-header">
+        <h2>Book your stay</h2>
+        <button class="modal-close" onclick="closeBooking()"><i class="fa fa-times"></i></button>
+      </div>
+      <div class="booking-card-preview" id="bookingPreview"></div>
+      <div class="booking-fields">
+        <div class="modal-field">
+          <label><i class="fa fa-calendar"></i> Check in</label>
+          <input type="date" id="bCheckin" onchange="calcTotal()"/>
+        </div>
+        <div class="modal-field">
+          <label><i class="fa fa-calendar"></i> Check out</label>
+          <input type="date" id="bCheckout" onchange="calcTotal()"/>
+        </div>
+        <div class="modal-field full">
+          <label><i class="fa fa-users"></i> Guests</label>
+          <div class="guest-counter">
+            <button onclick="changeBGuests(-1)"><i class="fa fa-minus"></i></button>
+            <span id="bGuestCount">2</span>
+            <button onclick="changeBGuests(1)"><i class="fa fa-plus"></i></button>
+          </div>
+        </div>
+        <div class="modal-field full">
+          <label><i class="fa fa-user"></i> Full name</label>
+          <input type="text" id="bName" placeholder="Your full name"/>
+        </div>
+        <div class="modal-field full">
+          <label><i class="fa fa-envelope"></i> Email</label>
+          <input type="email" id="bEmail" placeholder="your@email.com"/>
+        </div>
+      </div>
+      <div class="booking-summary" id="bookingSummary" style="display:none">
+        <div class="summary-row"><span id="summaryNights"></span><span id="summarySubtotal"></span></div>
+        <div class="summary-row"><span>Service fee</span><span id="summaryFee"></span></div>
+        <div class="summary-row total"><span>Total</span><span id="summaryTotal"></span></div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-clear" onclick="closeBooking()">Cancel</button>
+        <button class="modal-search-btn" onclick="confirmBooking()"><i class="fa fa-check"></i> Confirm booking</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="panel-overlay" id="wishlistOverlay" onclick="closeWishlistOutside(event)">
+    <div class="side-panel" id="wishlistPanel">
+      <div class="panel-header">
+        <h2> Saved places</h2>
+        <button onclick="closeWishlistPanel()"><i class="fa fa-times"></i></button>
+      </div>
+      <div id="wishlistContent"></div>
+    </div>
+  </div>
+
+
+  <div class="modal-overlay" id="confirmOverlay">
+    <div class="modal confirm-modal" id="confirmModal">
+      <div class="confirm-icon">🎉</div>
+      <h2>Booking Confirmed!</h2>
+      <p id="confirmMsg"></p>
+      <div class="confirm-details" id="confirmDetails"></div>
+      <button class="modal-search-btn" onclick="closeConfirm()" style="width:100%;justify-content:center;margin-top:20px">Done</button>
+    </div>
+  </div>
+
+
+  <div class="toast" id="toast"><i class="fa fa-check-circle"></i> <span id="toastMsg"></span></div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
